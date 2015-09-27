@@ -18,6 +18,8 @@ class Controller
 	{
 		// initialize db
 		$db = $this->db;
+		// stats
+		$f3->set('stats', $f3->format('Page rendered in {0} msecs / Memory usage {1} Kibytes',round(1e3*(microtime(TRUE)-$TIME),2),round(memory_get_usage(TRUE)/1e3,1)));
 	}
 
 	/**
