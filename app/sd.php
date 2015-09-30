@@ -5,7 +5,11 @@
  */
 class SD extends Controller
 {
-	// Display our home page
+	/**
+	 * Display home page
+	 * @param  object $f3 framework
+	 * @return void
+	 */
 	function home($f3)
 	{
 		// Retrieve blog entries
