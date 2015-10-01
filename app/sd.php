@@ -12,7 +12,9 @@ class SD extends Controller
 	 */
 	function home($f3)
 	{
-		// Retrieve blog entries
+		// set letter list
+		$f3->set('letters', range('A', 'Z'));
+		// set content part
 		$f3->set('content','home.htm');
 	}
 

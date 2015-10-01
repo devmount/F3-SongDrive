@@ -1,2 +1,43 @@
-<h2>Overview</h2>
-<p>Lorem ipsum ....</p>
+<div class="wrapper style2">
+	<section class="container">
+		<div class="row double">
+			<div class="7u">
+				<header class="major">
+
+					<h2>Songs</h2>
+					<ul class="letters">
+						<repeat group="{{ @letters }}" value="{{ @letter }}">
+							<li><a href="{{ @BASE }}/songs/{{ @letter }}" class="button">{{ @letter }}</a></li>
+						</repeat>
+						<li><a href="{{ @BASE }}/song/add" class="button" title="Add new song"><i class="fa fa-plus"></i></a></li>
+						<br style="clear:both;" />
+					</ul>
+
+					<h2>Setlists</h2>
+					<ul class="letters">
+						<li><a href="{{ @BASE }}/setlist/add" class="button">2013</a></li>
+						<li><a href="{{ @BASE }}/setlist/add" class="button">2014</a></li>
+						<li><a href="{{ @BASE }}/setlist/add" class="button">2015</a></li>
+						<li><a href="{{ @BASE }}/setlist/add" class="button" title="Add new setlist"><i class="fa fa-plus"></i></a></li>
+						<br style="clear:both;" />
+					</ul>
+
+				</header>
+			</div>
+			<div class="5u">
+				<h3>Recent Songs</h3>
+				<ul>
+					<li>Praise the Lord</li>
+					<li>Worship him</li>
+					<li>Majesty</li>
+					<li>I will follow</li>
+				</ul>
+				<h3>Recent Setlists</h3>
+				<ul>
+					<li>Worship Service 09.10.2015</li>
+					<li>Worship Service 16.10.2015</li>
+				</ul>
+			</div>
+		</div>
+	</section>
+</div>
