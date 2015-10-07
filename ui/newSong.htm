@@ -1,0 +1,52 @@
+<div class="wrapper style2">
+	<section class="container">
+		<h3>Create a Song</h3>
+
+		<check if="{{ isset(@message) }}">
+			<p class="message">{{ @message }}</p>
+		</check>
+
+		<form action="{{ @BASE }}/song/add" method="post">
+
+			<select name="lang" required="required">
+				<option default value="">Choose language</option>
+				<option value="en-EN">English</option>
+				<option value="de-DE">German</option>
+			</select>
+			<input type="text" name="title" placeholder="add title" value="{{ @POST.title }}" required="required" />
+			<input type="text" name="subtitle" placeholder="add subtitle" value="{{ @POST.subtitle }}" />
+			<input id="authorstext" value="{{ @authorstext }}" >
+			<input id="authorsmusic" value="{{ @authorsmusic }}" >
+			<input type="number" name="year" max="{{ @currentyear }}" placeholder="add year" value="{{ @POST.year }}" />
+			<input type="text" name="tuning" placeholder="add tuning" value="{{ @POST.tuning }}" />
+			<textarea name="publisher" cols="30" rows="2" placeholder="add publisher">{{ @POST.publisher }}</textarea>
+			<textarea name="content" cols="30" rows="10" placeholder="add song content" required="required">{{ @POST.content }}</textarea>
+			<input type="submit" value="Save">
+		</form>
+	</section>
+</div>
+
+<link rel="stylesheet" href="http://aehlke.github.io/tag-it/css/jquery.tagit.css" type="text/css" />
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" type="text/css" />
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="http://aehlke.github.io/tag-it/js/tag-it.js"></script>
+<script>
+$(document).ready(function () {
+    $("#authorstext").tagit({
+    	fieldName: "authorstext",
+        availableTags: {{ @authors }},
+        autocomplete: {delay: 0, minLength: 1},
+        allowSpaces: true,
+        placeholderText: "add text author"
+    });
+});
+$(document).ready(function () {
+    $("#authorsmusic").tagit({
+    	fieldName: "authorsmusic",
+        availableTags: {{ @authors }},
+        autocomplete: {delay: 0, minLength: 1},
+        allowSpaces: true,
+        placeholderText: "add music author"
+    });
+});
+</script>

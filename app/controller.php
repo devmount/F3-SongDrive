@@ -6,18 +6,10 @@
 class Controller
 {
 	/**
-	 * $db Jig database object
-	 * @var object
-	 */
-	protected $db;
-
-	/**
 	 * HTTP route pre-processor
 	 */
 	function beforeroute($f3)
 	{
-		// initialize db
-		$db = $this->db;
 		// stats
 		$f3->set(
 			'stats',
@@ -43,19 +35,13 @@ class Controller
 	 */
 	function __construct()
 	{
-		$f3 = Base::instance();
-		// Connect to the database
-		$db = new \DB\SQL('sqlite:' . $f3->get('db'));
-		if (file_exists($f3->get('dbsetup'))) {
-			// Initialize database with default setup
-			$db->exec(explode(';', $f3->read(SETUP)));
-			// Make default setup inaccessible
-			rename($f3->get('dbsetup'), 'db/setup.$ql');
-		}
-		// Use database-managed sessions
-		new DB\SQL\Session($db);
-		// Save frequently used variables
-		$this->db=$db;
+		// Initialize framework
+		$f3 = \Base::instance();
+		// Initialize database
+		$f3->set('DB', new \DB\Jig('db/', DB\Jig::FORMAT_JSON));
+		// Initialize models
+		\Model\Song::setup();
+		\Model\Author::setup();
 	}
 
 }

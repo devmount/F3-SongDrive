@@ -1,9 +1,11 @@
 <div class="wrapper style2">
 	<section class="container">
-		<div class="row double">
+		<div class="row">
 			<div class="7u">
 				<header class="major">
-
+<repeat group="{{ @debug }}" value="{{ @author }}">
+{{ @author.name }}<br />
+</repeat>
 					<h2>Songs</h2>
 					<ul class="letters">
 						<repeat group="{{ @letters }}" value="{{ @letter }}">
