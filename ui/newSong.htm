@@ -8,20 +8,21 @@
 
 		<form action="{{ @BASE }}/song/add" method="post">
 
-			<select name="lang" required="required">
-				<option default value="">Choose language</option>
-				<option value="en-EN">English</option>
-				<option value="de-DE">German</option>
+			<select name="lang" required title="language">
+				<option value="" {{ @POST.lang ? '' : 'selected'}} style="display: none;color:green;" class="formerize-placeholder">Choose language</option>
+				<repeat group="{{ @languages }}" key="{{ @key }}" value="{{ @label }}">
+					<option value="{{ @key }}" {{ @key==@POST.lang ? 'selected' : ''}} >{{ @label }}</option>
+				</repeat>
 			</select>
-			<input type="text" name="title" placeholder="add title" value="{{ @POST.title }}" required="required" />
-			<input type="text" name="subtitle" placeholder="add subtitle" value="{{ @POST.subtitle }}" />
-			<input id="authorstext" value="{{ @authorstext }}" >
-			<input id="authorsmusic" value="{{ @authorsmusic }}" >
-			<input type="number" name="year" max="{{ @currentyear }}" placeholder="add year" value="{{ @POST.year }}" />
-			<input type="text" name="tuning" placeholder="add tuning" value="{{ @POST.tuning }}" />
-			<textarea name="publisher" cols="30" rows="2" placeholder="add publisher">{{ @POST.publisher }}</textarea>
-			<textarea name="content" cols="30" rows="10" placeholder="add song content" required="required">{{ @POST.content }}</textarea>
-			<input type="submit" value="Save">
+			<input type="text" name="title" placeholder="add title" value="{{ @POST.title }}" required title="title" />
+			<input type="text" name="subtitle" placeholder="add subtitle" value="{{ @POST.subtitle }}" title="subtitle" />
+			<input name="authorstext" id="authorstext" value="{{ @POST.authorstext }}">
+			<input name="authorsmusic" id="authorsmusic" value="{{ @POST.authorsmusic }}" >
+			<input type="number" name="year" max="{{ @currentyear }}" placeholder="add year" value="{{ @POST.year }}" title="year" />
+			<input type="text" name="tuning" placeholder="add tuning" value="{{ @POST.tuning }}" title="tuning" />
+			<textarea class="autoexpand" name="publisher" cols="30" rows="2" data-min-rows="2" placeholder="add publisher" title="publisher">{{ @POST.publisher }}</textarea>
+			<textarea class="mono autoexpand" name="content" cols="30" rows="2" data-min-rows="2" placeholder="add song content" required title="song content">{{ @POST.content }}</textarea>
+			<input type="submit" value="Create">
 		</form>
 	</section>
 </div>
@@ -37,7 +38,7 @@ $(document).ready(function () {
         availableTags: {{ @authors }},
         autocomplete: {delay: 0, minLength: 1},
         allowSpaces: true,
-        placeholderText: "add text author"
+        placeholderText: "add text authors"
     });
 });
 $(document).ready(function () {
@@ -46,7 +47,11 @@ $(document).ready(function () {
         availableTags: {{ @authors }},
         autocomplete: {delay: 0, minLength: 1},
         allowSpaces: true,
-        placeholderText: "add music author"
+        placeholderText: "add music authors"
     });
+});
+$('.autoexpand').keyup(function (e) {
+    var rows = $(this).val().split("\n");
+    $(this).prop('rows', rows.length +1);
 });
 </script>

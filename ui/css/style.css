@@ -100,6 +100,11 @@
 		padding: 1em 0 1em 2em;
 	}
 
+	code,
+	.mono {
+		font-family: 'Fira Mono', 'Courier';
+	}
+
 	section.special, article.special {
 		text-align: center;
 	}
@@ -135,6 +140,8 @@
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
+	input[type="number"],
+	select,
 	textarea {
 		-moz-appearance: none;
 		-webkit-appearance: none;
@@ -142,52 +149,77 @@
 		-ms-appearance: none;
 		appearance: none;
 		background: none;
-		border: solid 1px #88b544;
+		border: none;
 		color: inherit;
 		display: block;
 		outline: 0;
-		padding: 0.75em;
+		padding: 1em 0;
 		text-decoration: none;
 		width: 100%;
 	}
-
-		input[type="text"]:focus,
-		input[type="password"]:focus,
-		input[type="email"]:focus,
-		textarea:focus {
-			border-color: #88b544;
-		}
-
 	input[type="text"],
 	input[type="password"],
-	input[type="email"] {
+	input[type="email"],
+	input[type="number"],
+	select {
 		line-height: 1em;
+	}
+	select {
+		width: auto;
+		padding-bottom: 0;
+		margin-bottom: 1em;
+		margin-left: -4px;
 	}
 
 	::-webkit-input-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: .5;
 		position: relative;
 		top: 3px;
 	}
-
 	:-moz-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: .5;
 	}
-
 	::-moz-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: .5;
 	}
-
 	:-ms-input-placeholder {
 		color: inherit;
-		opacity: 0.5;
+		opacity: .5;
 	}
-
 	.formerize-placeholder {
 		color: rgba(85, 85, 85, 0.5) !important;
+	}
+
+	form ul.tagit {
+		margin: 0;
+		background: transparent;
+		border: none;
+		border-radius: 0;
+		line-height: 1em;
+		padding: 1em 0;
+		font: inherit;
+	}
+	form ul.tagit li.tagit-choice {
+		margin: 0 .5em 0 0;
+		padding: .2em 18px 0 .5em;
+		background: #bbdd77;
+		color: #000;
+		font: inherit;
+		font-size: 10pt;
+		line-height: 1.5em;
+		border: none;
+		border-radius: 0;
+	}
+	form ul.tagit li.tagit-new {
+		padding: 0 4px 0 0;
+		margin: 0;
+	}
+	form ul.tagit input[type="text"] {
+		font: inherit;
+		line-height: 1em;
 	}
 
 /* Image */

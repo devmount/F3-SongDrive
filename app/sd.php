@@ -47,16 +47,15 @@ class SD extends Controller
 	{
 		// set current year as maximum for years list
 		$f3->set('currentyear', date('Y'));
-		// build author list
-		$authors = $f3->get('DB')->read('authors');
-		$authorlist = '';
-		foreach ($authors as $author) {
-			$authorlist .= "'" . $author['name'] . "',";
-		}
-		$f3->set('authors', '[' . $authorlist . ']');
+		// set author list
+		$f3->set('authors', $this->getAuthors($f3));
+		// set languages list
+		$f3->set('languages', $this->getLanguages());
+
 		// set content template
 		$f3->set('content', 'newSong.htm');
 	}
+
 
 	/**
 	 * Add new song to db
@@ -67,23 +66,104 @@ class SD extends Controller
 	{
 		$song = new \Model\Song();
 		$song->copyFrom('POST');
-		$song->copyTo('POST');
+		// handle authors
+		$authors = array(
+			'text' => explode(',', $song->authorstext),
+			'music' => explode(',', $song->authorsmusic),
+		);
+		// reset song authors
+		$song->clear('authorstext');
+		$song->clear('authorsmusic');
+		$authors_text = array();
+		$authors_music = array();
+		// map authors
+		$author = new \Model\Author();
+		foreach ($authors as $type => $names) {
+			foreach ($names as $name) {
+				// when name's empty: continue with next
+				if (!$name) {
+					continue;
+				}
+				// check if author name matches existing
+				$author->load(array('@name = ?', $name));
+				if ($author->dry()) {
+					// create and insert new author
+					$author->name = $name;
+					$author->save();
+				}
+				// add author object to song
+				switch ($type) {
+					case 'text':
+						$authors_text[] = $author->_id;
+						break;
+					case 'music':
+						$authors_music[] = $author->_id;
+						break;
 
-		// get authors list
+					default:
+						break;
+				}
+				// reset mapper for next author
+				$author->reset();
+			}
+		}
+		$song->authors_text = $authors_text;
+		$song->authors_music = $authors_music;
+
+		// save new song
+		$song->save();
+
+		// return message
+		$f3->set('message', 'Song saved successfully.');
+
+		// reroute to showSong
+		$f3->reroute('@show_song(@id=' . $song->_id . ')');
+	}
+
+
+	/**
+	 * Add new song to db
+	 * @param  object $f3 framework
+	 * @param  array  $params routing parameter
+	 * @return void
+	 */
+	function showSong($f3, $params)
+	{
+		$song = new \Model\Song();
+		$song->load(array('_id = ?', $params['id']));
+		$f3->set('song', $song);
+
+		// set content template
+		$f3->set('content', 'showSong.htm');
+	}
+
+
+	/**
+	 * creates a list of author names for tagit
+	 * @param  object $f3 framework
+	 * @return string authors list js array
+	 */
+	private function getAuthors($f3)
+	{
 		$authors = $f3->get('DB')->read('authors');
-		// $f3->set('authors', $authors);
-
-		// redirect to newSong
-		$f3->set('content', 'newSong.htm');
+		$authorlist = '';
+		foreach ($authors as $author) {
+			$authorlist .= "'" . $author['name'] . "',";
+		}
+		return '[' . $authorlist . ']';
 	}
 
 	/**
+	 * creates a list of languages
+	 * @param  object $f3 framework
+	 * @return array language short => language label
 	 */
-	function ajaxAuthors($f3)
+	private function getLanguages()
 	{
-		// get authors list
-		$authors = $f3->get('DB')->read('authors');
-		return $authors;
+		return array(
+			'en-EN' => 'English',
+			'de-DE' => 'German',
+		);
 	}
 
 }
