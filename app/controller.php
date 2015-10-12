@@ -10,15 +10,6 @@ class Controller
 	 */
 	function beforeroute($f3)
 	{
-		// stats
-		$f3->set(
-			'stats',
-			$f3->format(
-				'Page rendered in {0} msecs / Memory usage {1} Kibytes',
-				round(microtime(TRUE)-$TIME, 2),
-				round(memory_get_usage(TRUE)/1e3, 1)
-			)
-		);
 	}
 
 	/**

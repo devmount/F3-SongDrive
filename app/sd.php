@@ -12,31 +12,64 @@ class SD extends Controller
 	 */
 	function home($f3)
 	{
-
-		// test
-		// $author1 = new \Model\Author();
-		// $author1->name = 'Der erste dude';
-		// $author1->save();
-		// $author2 = new \Model\Author();
-		// $author2->name = 'Der zweite dude';
-		// $author2->save();
-
-		// $song = new \Model\Song();
-		// $song->title = 'Oceans';
-		// $song->content = 'You call me out...';
-		// $song->authors_text = array($author1, $author2);
-		// $song->authors_music = array($author2);
-		// $song->save();
-
-		// $song = new \Model\Song();
-		// $song->load(array('_id = ?','560e7d01629c12.22187227'));
-		// $f3->set('debug', $song->authors_text);
-
 		// set letter list
-		$f3->set('letters', range('A', 'Z'));
+		$f3->set('letters', array_keys($this->getGroupedSongs()));
+
+		// set recent song list
+		$songs = new \Model\Song();
+		$recentsongs = $songs->find(array('timestamp <> ""'), array('order' => 'timestamp DESC', 'limit' => 5));
+		$f3->set('recentsongs', $recentsongs);
+
 		// set content template
+		$f3->set('heading', 'Dashboard');
+		$f3->set('footerinfo', 'Dashboard');
 		$f3->set('content','home.htm');
 	}
+
+
+	/**
+	 * List existing songs
+	 * @param  object $f3 framework
+	 * @param  array  $params routing parameter
+	 * @return void
+	 */
+	function listSongs($f3, $params)
+	{
+		// get optional parameter to only list songs with given initial
+		$i = $params['initial'];
+		// get grouped songs
+		$songs = $this->getGroupedSongs();
+
+		// set letter ...
+		$f3->set('letters', array_keys($songs));
+		// ... and list of either all songs or only songs with given initial
+		$f3->set('songs', $i ? array($i => $songs[$i]) : $songs);
+
+		// set content template
+		$f3->set('heading', 'List songs');
+		$f3->set('content', 'listSongs.htm');
+	}
+
+
+	/**
+	 * Add new song to db
+	 * @param  object $f3 framework
+	 * @param  array  $params routing parameter
+	 * @return void
+	 */
+	function showSong($f3, $params)
+	{
+		$song = new \Model\Song();
+		$song->load(array('_id = ?', $params['id']));
+		$f3->set('song', $song->cast());
+
+		// set content template
+		$f3->set('heading', $song->title);
+		$f3->set('subheading', $song->subtitle);
+		$f3->set('songfooter', TRUE);
+		$f3->set('content', 'showSong.htm');
+	}
+
 
 	/**
 	 * Display page to create new song
@@ -53,6 +86,8 @@ class SD extends Controller
 		$f3->set('languages', $this->getLanguages());
 
 		// set content template
+		$f3->set('heading', 'Create a new song');
+		$f3->set('submit', 'Create');
 		$f3->set('content', 'newSong.htm');
 	}
 
@@ -68,12 +103,12 @@ class SD extends Controller
 		$song->copyFrom('POST');
 		// handle authors
 		$authors = array(
-			'text' => explode(',', $song->authorstext),
-			'music' => explode(',', $song->authorsmusic),
+			'text' => $song->authors_text,
+			'music' => $song->authors_music,
 		);
 		// reset song authors
-		$song->clear('authorstext');
-		$song->clear('authorsmusic');
+		$song->clear('authors_text');
+		$song->clear('authors_music');
 		$authors_text = array();
 		$authors_music = array();
 		// map authors
@@ -122,19 +157,43 @@ class SD extends Controller
 
 
 	/**
-	 * Add new song to db
+	 * Display page to create new song
 	 * @param  object $f3 framework
 	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function showSong($f3, $params)
+	function editSong($f3, $params)
 	{
+		// set current year as maximum for years list
+		$f3->set('currentyear', date('Y'));
+		// set author list
+		$f3->set('authors', $this->getAuthors($f3));
+		// set languages list
+		$f3->set('languages', $this->getLanguages());
+
+		// load song
 		$song = new \Model\Song();
 		$song->load(array('_id = ?', $params['id']));
-		$f3->set('song', $song);
+
+		// prefill author lists
+		$authors_text = array();
+		$authors_music = array();
+		foreach ($song->authors_text as $author) {
+			$authors_text[] = $author->name;
+		}
+		foreach ($song->authors_music as $author) {
+			$authors_music[] = $author->name;
+		}
+		$f3->set('authors_text', implode(',', $authors_text));
+		$f3->set('authors_music', implode(',', $authors_music));
+
+		// copy song object to formula
+		$song->copyTo('POST');
 
 		// set content template
-		$f3->set('content', 'showSong.htm');
+		$f3->set('heading', 'Edit a song');
+		$f3->set('submit', 'Update');
+		$f3->set('content', 'newSong.htm');
 	}
 
 
@@ -164,6 +223,29 @@ class SD extends Controller
 			'en-EN' => 'English',
 			'de-DE' => 'German',
 		);
+	}
+
+	/**
+	 * creates a list of languages
+	 * @return array initial => array(songs)
+	 */
+	private function getGroupedSongs()
+	{
+		// get letters and init song mapper
+		$letters = range('A', 'Z');
+		$song = new \Model\Song();
+		$songs_grouped = array();
+
+		// group songs by initial
+		foreach ($letters as $letter) {
+			$result = $song->find(array('@title LIKE "?"', $letter . '%'));
+			if ($result) {
+				$songs_grouped[$letter] = $result;
+			}
+			$song->reset();
+		}
+
+		return $songs_grouped;
 	}
 
 }

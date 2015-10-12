@@ -3,9 +3,7 @@
 		<div class="row">
 			<div class="7u">
 				<header class="major">
-<repeat group="{{ @debug }}" value="{{ @author }}">
-{{ @author.name }}<br />
-</repeat>
+
 					<h2>Songs</h2>
 					<ul class="letters">
 						<repeat group="{{ @letters }}" value="{{ @letter }}">
@@ -28,12 +26,15 @@
 			</div>
 			<div class="5u">
 				<h3>Recent Songs</h3>
-				<ul>
-					<li>Praise the Lord</li>
-					<li>Worship him</li>
-					<li>Majesty</li>
-					<li>I will follow</li>
-				</ul>
+				<table>
+					<repeat group="{{ @recentsongs }}" value="{{ @song }}">
+						<tr>
+							<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
+							<td>{{ @song.timestamp }}</td>
+						</tr>
+					</repeat>
+				</table>
+
 				<h3>Recent Setlists</h3>
 				<ul>
 					<li>Worship Service 09.10.2015</li>

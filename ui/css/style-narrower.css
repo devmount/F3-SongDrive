@@ -38,7 +38,7 @@
 
 	.wrapper.style2 {
 		background: #f2f2f2;
-		text-align: center;
+		/*text-align: center;*/
 	}
 
 		.wrapper.style2 .major {
@@ -196,7 +196,7 @@
 /* Banner */
 
 	#banner {
-		padding: 6em 0em 3em 0em;
+		padding: 1em 0em 1em 0em;
 		text-align: center;
 		text-transform: uppercase;
 		color: #FFF;
@@ -206,6 +206,11 @@
 			padding: 0em 1em;
 		}
 
+		#banner h1 {
+			padding: 0.50em 0.50em;
+			font-size: 1.8em;
+		}
+
 		#banner h2 {
 			padding: 0.50em 0.50em;
 			font-size: 1.8em;
@@ -213,8 +218,4 @@
 
 		#banner span, #banner p {
 			font-size: 1.1em;
-		}
-
-		#banner span {
-			padding: 1em 0em;
 		}

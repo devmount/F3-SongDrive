@@ -37,6 +37,12 @@
 		-ms-transition: all 0.15s ease-in-out;
 		transition: all 0.15s ease-in-out;
 	}
+	a:hover {
+		color: #bbdd77;
+	}
+	.fa {
+		text-decoration: none;
+	}
 
 	strong, b {
 		font-weight: 700;
@@ -103,6 +109,10 @@
 	code,
 	.mono {
 		font-family: 'Fira Mono', 'Courier';
+	}
+
+	.right {
+		text-align: right;
 	}
 
 	section.special, article.special {
@@ -446,7 +456,7 @@
 		color: #88b544;
 		cursor: pointer;
 		display: inline-block;
-		padding: 0.90em 1.2em;
+		padding: 0.60em 1.2em;
 		letter-spacing: 1px;
 		text-align: center;
 		text-decoration: none;
@@ -511,7 +521,7 @@
 /* Wrapper */
 
 	.wrapper {
-		padding: 6em 0em 4em 0em;
+		padding: 3em 0em 4em 0em;
 	}
 
 		.wrapper.style1 {
@@ -698,7 +708,7 @@
 /* Banner */
 
 	#banner {
-		padding: 6em 0em 3em 0em;
+		padding: 2em 0em;
 		text-align: center;
 		text-transform: uppercase;
 		color: white;
@@ -706,6 +716,14 @@
 
 		#banner .container {
 			padding: 0em 8em;
+		}
+
+		#banner h1 {
+			display: inline-block;
+			padding: 0.50em 0.30em;
+			font-size: 3em;
+			line-height: 1em;
+			font-weight: 400;
 		}
 
 		#banner h2 {
@@ -724,9 +742,6 @@
 			font-weight: 300;
 		}
 
-		#banner span {
-			padding: 1em 0em;
-		}
 
 /* Main */
 
@@ -757,8 +772,7 @@
 /* Footer */
 
 	#footer {
-		padding: 6em 0 2em 0;
-		text-align: center;
+		padding: 3em 0 2em 0;
 		color: white;
 	}
 
@@ -767,9 +781,14 @@
 			border-color: inherit;
 			opacity: .05;
 		}
-
+		#footer .major {
+			text-align: left;
+		}
 		#footer .major h2 {
 			color: inherit;
+			font-size: 1.6em;
+			font-weight: 300;
+			margin-bottom: .3em;
 		}
 
 		#footer .major .byline {

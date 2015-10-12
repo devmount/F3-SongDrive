@@ -1,0 +1,40 @@
+<div class="wrapper style2">
+	<section class="container">
+
+		<check if="{{ isset(@message) }}">
+			<p class="message">{{ @message }}</p>
+		</check>
+
+		<div class="row">
+
+			<div class="8u">
+				<header class="major">
+					<repeat group="{{ @letters }}" value="{{ @letter }}">
+						<check if="{{ @songs[@letter] }}">
+							<h2>{{ @letter}}</h2>
+							<ul>
+								<repeat group="{{ @songs[@letter] }}" value="{{ @song }}">
+									<li>
+										<a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a>
+										{{ @song.subtitle ? '(' . @song.subtitle . ')' : '' }}
+									</li>
+								</repeat>
+							</ul>
+						</check>
+					</repeat>
+				</header>
+			</div>
+
+			<div class="4u">
+				<ul class="letters">
+					<repeat group="{{ @letters }}" value="{{ @letter }}">
+						<li><a href="{{ @BASE }}/songs/{{ @letter }}" class="button">{{ @letter }}</a></li>
+					</repeat>
+					<br style="clear:both;" />
+				</ul>
+			</div>
+
+		</div>
+
+	</section>
+</div>

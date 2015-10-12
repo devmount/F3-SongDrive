@@ -1,28 +1,35 @@
 <div class="wrapper style2">
 	<section class="container">
-		<h3>Create a Song</h3>
-
 		<check if="{{ isset(@message) }}">
 			<p class="message">{{ @message }}</p>
 		</check>
 
 		<form action="{{ @BASE }}/song/add" method="post">
-
-			<select name="lang" required title="language">
-				<option value="" {{ @POST.lang ? '' : 'selected'}} style="display: none;color:green;" class="formerize-placeholder">Choose language</option>
-				<repeat group="{{ @languages }}" key="{{ @key }}" value="{{ @label }}">
-					<option value="{{ @key }}" {{ @key==@POST.lang ? 'selected' : ''}} >{{ @label }}</option>
-				</repeat>
-			</select>
-			<input type="text" name="title" placeholder="add title" value="{{ @POST.title }}" required title="title" />
-			<input type="text" name="subtitle" placeholder="add subtitle" value="{{ @POST.subtitle }}" title="subtitle" />
-			<input name="authorstext" id="authorstext" value="{{ @POST.authorstext }}">
-			<input name="authorsmusic" id="authorsmusic" value="{{ @POST.authorsmusic }}" >
-			<input type="number" name="year" max="{{ @currentyear }}" placeholder="add year" value="{{ @POST.year }}" title="year" />
-			<input type="text" name="tuning" placeholder="add tuning" value="{{ @POST.tuning }}" title="tuning" />
-			<textarea class="autoexpand" name="publisher" cols="30" rows="2" data-min-rows="2" placeholder="add publisher" title="publisher">{{ @POST.publisher }}</textarea>
-			<textarea class="mono autoexpand" name="content" cols="30" rows="2" data-min-rows="2" placeholder="add song content" required title="song content">{{ @POST.content }}</textarea>
-			<input type="submit" value="Create">
+			<div class="row">
+				<div class="6u">
+					<select name="lang" required title="language">
+						<option value="" {{ @POST.lang ? '' : 'selected'}} style="display:none; color:green;" class="formerize-placeholder">Choose language</option>
+						<repeat group="{{ @languages }}" key="{{ @key }}" value="{{ @label }}">
+							<option value="{{ @key }}" {{ @key==@POST.lang ? 'selected' : ''}} >{{ @label }}</option>
+						</repeat>
+					</select>
+					<input type="text" name="title" placeholder="add title" value="{{ @POST.title }}" required title="title" />
+					<input type="text" name="subtitle" placeholder="add subtitle" value="{{ @POST.subtitle }}" title="subtitle" />
+					<input name="authors_text" id="authorstext" value="{{ @authors_text }}">
+					<input name="authors_music" id="authorsmusic" value="{{ @authors_music }}" >
+					<input type="number" name="year" max="{{ @currentyear }}" placeholder="add year" value="{{ @POST.year }}" title="year" />
+					<input type="text" name="tuning" placeholder="add tuning" value="{{ @POST.tuning }}" title="tuning" />
+					<textarea class="autogrow" name="publisher" rows="2" placeholder="add publisher" title="publisher">{{ @POST.publisher }}</textarea>
+				</div>
+				<div class="6u">
+					<textarea class="mono autogrow" name="content" rows="2" placeholder="add song content" required title="song content">{{ @POST.content }}</textarea>
+				</div>
+			</div>
+			<div class="row right">
+				<div class="12u">
+					<input type="submit" value="{{ @submit }}">
+				</div>
+			</div>
 		</form>
 	</section>
 </div>
@@ -31,6 +38,7 @@
 <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css" type="text/css" />
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="http://aehlke.github.io/tag-it/js/tag-it.js"></script>
+<script src="{{ @BASE }}/ui/js/jquery.ns-autogrow.min.js"></script>
 <script>
 $(document).ready(function () {
     $("#authorstext").tagit({
@@ -50,8 +58,7 @@ $(document).ready(function () {
         placeholderText: "add music authors"
     });
 });
-$('.autoexpand').keyup(function (e) {
-    var rows = $(this).val().split("\n");
-    $(this).prop('rows', rows.length +1);
+$(function(){
+	$('.autogrow').autogrow({vertical: true, horizontal: false, flickering: false});
 });
 </script>
