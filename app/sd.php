@@ -93,14 +93,69 @@ class SD extends Controller
 
 
 	/**
-	 * Add new song to db
+	 * Display page to create new song
 	 * @param  object $f3 framework
+	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function createSong($f3)
+	function editSong($f3, $params)
 	{
+		// set current year as maximum for years list
+		$f3->set('currentyear', date('Y'));
+		// set author list
+		$f3->set('authors', $this->getAuthors($f3));
+		// set languages list
+		$f3->set('languages', $this->getLanguages());
+
+		// load song
 		$song = new \Model\Song();
+		$song->load(array('_id = ?', $params['id']));
+
+		// prefill author lists
+		$authors_text = array();
+		$authors_music = array();
+		if ($song->authors_text) {
+			foreach ($song->authors_text as $author) {
+				$authors_text[] = $author->name;
+			}
+		}
+		if ($song->authors_music) {
+			foreach ($song->authors_music as $author) {
+				$authors_music[] = $author->name;
+			}
+		}
+		$f3->set('authors_text', implode(',', $authors_text));
+		$f3->set('authors_music', implode(',', $authors_music));
+
+		// copy song object to formula
+		$song->copyTo('POST');
+
+		// set content template
+		$f3->set('heading', 'Edit a song');
+		$f3->set('submit', 'Update');
+		$f3->set('content', 'newSong.htm');
+	}
+
+
+	/**
+	 * Save song to db
+	 * @param  object $f3 framework
+	 * @param  array  $params routing parameter
+	 * @return void
+	 */
+	function saveSong($f3, $params)
+	{
+		// initialize song
+		$song = new \Model\Song();
+print_r($params);
+		// handle existing song update
+		if (isset($params['id'])) {
+			$song->load(array('_id = ?', $params['id']));
+		}
+
+		// get form data
 		$song->copyFrom('POST');
+
 		// handle authors
 		$authors = array(
 			'text' => $song->authors_text,
@@ -148,8 +203,14 @@ class SD extends Controller
 		// save new song
 		$song->save();
 
-		// return message
-		$f3->set('message', 'Song saved successfully.');
+		// set success message
+		$f3->set('SESSION.flash',
+			array(
+				'type' => 'notice',
+				'title' => 'Song saved',
+				'message' => 'Database updated successfully.',
+			)
+		);
 
 		// reroute to showSong
 		$f3->reroute('@show_song(@id=' . $song->_id . ')');
@@ -157,43 +218,29 @@ class SD extends Controller
 
 
 	/**
-	 * Display page to create new song
+	 * Display page to delete a song
 	 * @param  object $f3 framework
 	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function editSong($f3, $params)
+	function removeSong($f3, $params)
 	{
-		// set current year as maximum for years list
-		$f3->set('currentyear', date('Y'));
-		// set author list
-		$f3->set('authors', $this->getAuthors($f3));
-		// set languages list
-		$f3->set('languages', $this->getLanguages());
-
-		// load song
+		// delete song
 		$song = new \Model\Song();
 		$song->load(array('_id = ?', $params['id']));
+		$song->erase();
 
-		// prefill author lists
-		$authors_text = array();
-		$authors_music = array();
-		foreach ($song->authors_text as $author) {
-			$authors_text[] = $author->name;
-		}
-		foreach ($song->authors_music as $author) {
-			$authors_music[] = $author->name;
-		}
-		$f3->set('authors_text', implode(',', $authors_text));
-		$f3->set('authors_music', implode(',', $authors_music));
+		// set success message
+		$f3->set('SESSION.flash',
+			array(
+				'type' => 'notice',
+				'title' => 'Song deleted',
+				'message' => 'Database updated successfully.',
+			)
+		);
 
-		// copy song object to formula
-		$song->copyTo('POST');
-
-		// set content template
-		$f3->set('heading', 'Edit a song');
-		$f3->set('submit', 'Update');
-		$f3->set('content', 'newSong.htm');
+		// reroute to home
+		$f3->reroute('@home');
 	}
 
 

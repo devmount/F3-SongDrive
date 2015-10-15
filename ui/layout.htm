@@ -14,15 +14,18 @@
 		<script src="ui/js/jquery.dropotron.min.js"></script>
 		<script src="ui/js/skel.min.js"></script>
 		<script src="ui/js/skel-layers.min.js"></script>
+		<script src="ui/js/jquery.growl.js"></script>
 		<script src="ui/js/init.js"></script>
 		<noscript>
 			<link rel="stylesheet" href="ui/css/skel.css" type="text/css" />
 			<link rel="stylesheet" href="ui/css/style.css" type="text/css" />
 		</noscript>
+		<link rel="stylesheet" href="ui/css/jquery.growl.css" type="text/css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
 
 		<!-- TODO: insert additional script/style tags -->
 		<check if="{{ isset(@headitional) }}">{{ @headitional }}</check>
+
 	</head>
 	<body class="homepage">
 
@@ -94,7 +97,7 @@
 						<check if="{{ isset(@songfooter) }}">
 							<a href="{{ @BASE }}/song/{{ @song._id }}/edit" class="fa fa-pencil fa-lg fa-fw" title="Edit"></a>
 							<a href="{{ @BASE }}/song/{{ @song._id }}/new" class="fa fa-plus fa-lg fa-fw" title="New (based on this song)"></a>
-							<a href="{{ @BASE }}/song/{{ @song._id }}/remove" class="fa fa-trash fa-lg fa-fw" title="Remove"></a><br />
+							<a href="{{ @BASE }}/song/{{ @song._id }}/remove" class="fa fa-trash fa-lg fa-fw" title="Remove" onclick="return confirm('Do you really want to delete this song?');"></a><br />
 
 							<a href="{{ @BASE }}/song/{{ @song._id }}/pdf" class="fa fa-file-pdf-o fa-lg fa-fw" title="PDF Export"></a>
 							<a href="{{ @BASE }}/song/{{ @song._id }}/txt" class="fa fa-file-text-o fa-lg fa-fw" title="TXT Export"></a>
@@ -115,5 +118,18 @@
 			</div>
 		</div>
 
+		<check if="{{ isset(@SESSION.flash) }}">
+			<script type="text/javascript">
+				$.growl({
+					title: "{{ @SESSION.flash.title }}",
+					message: "{{ @SESSION.flash.message }}",
+					location: 'tr',
+					style: '{{ @SESSION.flash.type }}',
+					fixed: true,
+					size: 'large',
+					delayOnHover: false
+				});
+			</script>
+		</check>
 	</body>
 </html>

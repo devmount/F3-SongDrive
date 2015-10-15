@@ -10,6 +10,7 @@ class Controller
 	 */
 	function beforeroute($f3)
 	{
+
 	}
 
 	/**
@@ -19,6 +20,8 @@ class Controller
 	{
 		// Render HTML layout
 		echo Template::instance()->render('layout.htm');
+		// clear flash messages
+		\Base::instance()->clear('SESSION.flash');
 	}
 
 	/**
@@ -30,6 +33,8 @@ class Controller
 		$f3 = \Base::instance();
 		// Initialize database
 		$f3->set('DB', new \DB\Jig('db/', DB\Jig::FORMAT_JSON));
+		// Initialize jig based sessions
+		new \DB\Jig\Session($f3->get('DB'));
 		// Initialize models
 		\Model\Song::setup();
 		\Model\Author::setup();
