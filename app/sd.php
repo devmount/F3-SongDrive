@@ -149,7 +149,7 @@ class SD extends Controller
 		// handle existing song update
 		if ($f3->exists('PARAMS.id')) {
 			$song->load(array('_id = ?', $f3->get('PARAMS.id')));
-			$song->created = date("Y-m-d H:i:s");
+			$song->updated = date("Y-m-d H:i:s");
 		}
 
 		// get form data

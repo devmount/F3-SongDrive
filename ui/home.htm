@@ -26,25 +26,29 @@
 				</header>
 			</div>
 			<div class="5u">
-				<h3>Recently created Songs</h3>
-				<table>
-					<repeat group="{{ @recentsongs.created }}" value="{{ @song }}">
-						<tr>
-							<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
-							<td>{{ @song.timestamp }}</td>
-						</tr>
-					</repeat>
-				</table>
+				<check if="{{ @recentsongs.created }}">
+					<h3>Recently created Songs</h3>
+					<table>
+						<repeat group="{{ @recentsongs.created }}" value="{{ @song }}">
+							<tr>
+								<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
+								<td>{{ @song.timestamp }}</td>
+							</tr>
+						</repeat>
+					</table>
+				</check>
 
-				<h3>Recently updated Songs</h3>
-				<table>
-					<repeat group="{{ @recentsongs.updated }}" value="{{ @song }}">
-						<tr>
-							<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
-							<td>{{ @song.timestamp }}</td>
-						</tr>
-					</repeat>
-				</table>
+				<check if="{{ @recentsongs.updated }}">
+					<h3>Recently updated Songs</h3>
+					<table>
+						<repeat group="{{ @recentsongs.updated }}" value="{{ @song }}">
+							<tr>
+								<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
+								<td>{{ @song.timestamp }}</td>
+							</tr>
+						</repeat>
+					</table>
+				</check>
 
 				<h3>Recent Setlists</h3>
 				<ul>

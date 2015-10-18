@@ -5,19 +5,26 @@
 
 			<div class="8u">
 				<header class="major">
-					<repeat group="{{ @letters }}" value="{{ @letter }}">
-						<check if="{{ @songs[@letter] }}">
-							<h2>{{ @letter }}</h2>
-							<ul>
-								<repeat group="{{ @songs[@letter] }}" value="{{ @song }}">
-									<li>
-										<a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a>
-										{{ @song.subtitle ? '(' . @song.subtitle . ')' : '' }}
-									</li>
-								</repeat>
-							</ul>
-						</check>
-					</repeat>
+					<check if="{{ @letters }}">
+						<true>
+							<repeat group="{{ @letters }}" value="{{ @letter }}">
+								<check if="{{ @songs[@letter] }}">
+									<h2>{{ @letter }}</h2>
+									<ul>
+										<repeat group="{{ @songs[@letter] }}" value="{{ @song }}">
+											<li>
+												<a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a>
+												{{ @song.subtitle ? '(' . @song.subtitle . ')' : '' }}
+											</li>
+										</repeat>
+									</ul>
+								</check>
+							</repeat>
+						</true>
+						<false>
+							No songs available at the moment.
+						</false>
+					</check>
 				</header>
 			</div>
 
