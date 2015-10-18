@@ -26,9 +26,19 @@
 				</header>
 			</div>
 			<div class="5u">
-				<h3>Recent Songs</h3>
+				<h3>Recently created Songs</h3>
 				<table>
-					<repeat group="{{ @recentsongs }}" value="{{ @song }}">
+					<repeat group="{{ @recentsongs.created }}" value="{{ @song }}">
+						<tr>
+							<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
+							<td>{{ @song.timestamp }}</td>
+						</tr>
+					</repeat>
+				</table>
+
+				<h3>Recently updated Songs</h3>
+				<table>
+					<repeat group="{{ @recentsongs.updated }}" value="{{ @song }}">
 						<tr>
 							<td><a href="{{ @BASE }}/song/{{ @song._id }}">{{ @song.title }}</a></td>
 							<td>{{ @song.timestamp }}</td>

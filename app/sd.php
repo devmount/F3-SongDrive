@@ -15,10 +15,12 @@ class SD extends Controller
 		// set letter list
 		$f3->set('letters', array_keys($this->getGroupedSongs()));
 
-		// set recent song list
+		// set recent song lists
 		$songs = new \Model\Song();
-		$recentsongs = $songs->find(array('timestamp <> ""'), array('order' => 'timestamp DESC', 'limit' => 5));
-		$f3->set('recentsongs', $recentsongs);
+		$created = $songs->find(array('created <> ""'), array('order' => 'created DESC', 'limit' => 5));
+		$songs->reset();
+		$updated = $songs->find(array('updated <> ""'), array('order' => 'updated DESC', 'limit' => 5));
+		$f3->set('recentsongs', array('created' => $created, 'updated' => $updated));
 
 		// set content template
 		$f3->set('heading', 'Dashboard');
@@ -147,6 +149,7 @@ class SD extends Controller
 		// handle existing song update
 		if ($f3->exists('PARAMS.id')) {
 			$song->load(array('_id = ?', $f3->get('PARAMS.id')));
+			$song->created = date("Y-m-d H:i:s");
 		}
 
 		// get form data

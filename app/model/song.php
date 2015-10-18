@@ -6,7 +6,12 @@ class Song extends \DB\Cortex
 {
     protected
         $fieldConf = array(
-            'timestamp' => array(
+            'created' => array(
+                'type' => \DB\SQL\Schema::DT_TIMESTAMP,
+                'nullable' => false,
+                'default' => \DB\SQL\Schema::DF_CURRENT_TIMESTAMP,
+            ),
+            'updated' => array(
                 'type' => \DB\SQL\Schema::DT_TIMESTAMP,
                 'nullable' => false,
                 'default' => \DB\SQL\Schema::DF_CURRENT_TIMESTAMP,
