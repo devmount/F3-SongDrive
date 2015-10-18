@@ -1,7 +1,7 @@
 <div class="wrapper style2">
 	<section class="container">
 
-		<form action="{{ @BASE }}/song/add" method="post">
+		<form action="{{ @BASE }}/song/{{ @POST._id ? @POST._id . '/edit' : 'add'}}" method="post">
 			<div class="row">
 				<div class="6u">
 					<select name="lang" required title="language">

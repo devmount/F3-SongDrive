@@ -86,7 +86,7 @@ class SD extends Controller
 		// set content template
 		$f3->set('heading', 'Create a new song');
 		$f3->set('submit', 'Create');
-		$f3->set('content', 'newSong.htm');
+		$f3->set('content', 'formFields.htm');
 	}
 
 
@@ -130,7 +130,7 @@ class SD extends Controller
 		// set content template
 		$f3->set('heading', 'Edit a song');
 		$f3->set('submit', 'Update');
-		$f3->set('content', 'newSong.htm');
+		$f3->set('content', 'formFields.htm');
 	}
 
 
@@ -147,13 +147,6 @@ class SD extends Controller
 		// handle existing song update
 		if ($f3->exists('PARAMS.id')) {
 			$song->load(array('_id = ?', $f3->get('PARAMS.id')));
-		$f3->set('SESSION.flash',
-			array(
-				'type' => 'notice',
-				'title' => 'Song: ' . $f3->get('PARAMS.id'),
-				'message' => 'Database updated successfully.',
-			)
-		);
 		}
 
 		// get form data
@@ -207,13 +200,13 @@ class SD extends Controller
 		$song->save();
 
 		// set success message
-		// $f3->set('SESSION.flash',
-		// 	array(
-		// 		'type' => 'notice',
-		// 		'title' => 'Song saved',
-		// 		'message' => 'Database updated successfully.',
-		// 	)
-		// );
+		$f3->set('SESSION.flash',
+			array(
+				'type' => 'notice',
+				'title' => 'Song saved',
+				'message' => 'Database updated successfully.',
+			)
+		);
 
 		// reroute to showSong
 		$f3->reroute('@show_song(@id=' . $song->_id . ')');
