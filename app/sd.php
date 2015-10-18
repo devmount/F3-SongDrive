@@ -30,13 +30,12 @@ class SD extends Controller
 	/**
 	 * List existing songs
 	 * @param  object $f3 framework
-	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function listSongs($f3, $params)
+	function listSongs($f3)
 	{
 		// get optional parameter to only list songs with given initial
-		$i = $params['initial'];
+		$i =  $f3->get('PARAMS.initial');
 		// get grouped songs
 		$songs = $this->getGroupedSongs();
 
@@ -54,13 +53,12 @@ class SD extends Controller
 	/**
 	 * Add new song to db
 	 * @param  object $f3 framework
-	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function showSong($f3, $params)
+	function showSong($f3)
 	{
 		$song = new \Model\Song();
-		$song->load(array('_id = ?', $params['id']));
+		$song->load(array('_id = ?', $f3->get('PARAMS.id')));
 		$f3->set('song', $song->cast());
 
 		// set content template
@@ -95,10 +93,9 @@ class SD extends Controller
 	/**
 	 * Display page to create new song
 	 * @param  object $f3 framework
-	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function editSong($f3, $params)
+	function editSong($f3)
 	{
 		// set current year as maximum for years list
 		$f3->set('currentyear', date('Y'));
@@ -109,7 +106,7 @@ class SD extends Controller
 
 		// load song
 		$song = new \Model\Song();
-		$song->load(array('_id = ?', $params['id']));
+		$song->load(array('_id = ?', $f3->get('PARAMS.id')));
 
 		// prefill author lists
 		$authors_text = array();
@@ -140,17 +137,23 @@ class SD extends Controller
 	/**
 	 * Save song to db
 	 * @param  object $f3 framework
-	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function saveSong($f3, $params)
+	function saveSong($f3)
 	{
 		// initialize song
 		$song = new \Model\Song();
-print_r($params);
+
 		// handle existing song update
-		if (isset($params['id'])) {
-			$song->load(array('_id = ?', $params['id']));
+		if ($f3->exists('PARAMS.id')) {
+			$song->load(array('_id = ?', $f3->get('PARAMS.id')));
+		$f3->set('SESSION.flash',
+			array(
+				'type' => 'notice',
+				'title' => 'Song: ' . $f3->get('PARAMS.id'),
+				'message' => 'Database updated successfully.',
+			)
+		);
 		}
 
 		// get form data
@@ -204,13 +207,13 @@ print_r($params);
 		$song->save();
 
 		// set success message
-		$f3->set('SESSION.flash',
-			array(
-				'type' => 'notice',
-				'title' => 'Song saved',
-				'message' => 'Database updated successfully.',
-			)
-		);
+		// $f3->set('SESSION.flash',
+		// 	array(
+		// 		'type' => 'notice',
+		// 		'title' => 'Song saved',
+		// 		'message' => 'Database updated successfully.',
+		// 	)
+		// );
 
 		// reroute to showSong
 		$f3->reroute('@show_song(@id=' . $song->_id . ')');
@@ -220,14 +223,13 @@ print_r($params);
 	/**
 	 * Display page to delete a song
 	 * @param  object $f3 framework
-	 * @param  array  $params routing parameter
 	 * @return void
 	 */
-	function removeSong($f3, $params)
+	function removeSong($f3)
 	{
 		// delete song
 		$song = new \Model\Song();
-		$song->load(array('_id = ?', $params['id']));
+		$song->load(array('_id = ?', $f3->get('PARAMS.id')));
 		$song->erase();
 
 		// set success message
